@@ -255,8 +255,12 @@
   /* ===== 第三页：普通淡入淡出转场 ===== */
   .page3{
     position:absolute; inset:0; z-index:5;
-    background:url('page3.jpg') center/cover no-repeat;
     visibility:hidden; opacity:0;
+  }
+  .page3::before{
+    content:''; position:absolute; inset:-12px;
+    background:url('page3.jpg') center/cover no-repeat;
+    filter:blur(2px);
   }
   /* 新图缓缓淡入，与旧内容淡出衔接成自然的交叉溶解 */
   .page3.reveal{
@@ -277,8 +281,12 @@
   /* ===== 第四页：暗黑资料卡（模仿参考截图风格） ===== */
   .page4{
     position:absolute; inset:0; z-index:6;
-    background:linear-gradient(180deg, rgba(8,8,11,.3), rgba(8,8,11,.5)), url('page3.jpg') center/cover no-repeat;
     visibility:hidden; opacity:0;
+  }
+  .page4::before{
+    content:''; position:absolute; inset:-12px;
+    background:linear-gradient(180deg, rgba(8,8,11,.3), rgba(8,8,11,.5)), url('page3.jpg') center/cover no-repeat;
+    filter:blur(2px);
   }
   .page4.reveal{
     visibility:visible;
@@ -329,8 +337,8 @@
   /* 导航栏：黑色长方形底条 */
   .pf-nav{
     margin-top:6%;
-    display:flex; justify-content:flex-start; gap:8.5%;
-    width:90%; padding:14px 4%; box-sizing:border-box;
+    display:flex; justify-content:flex-start; gap:6%;
+    width:100%; padding:10px 4%; box-sizing:border-box;
     background:rgba(0,0,0,.72);
     border:1px solid rgba(232,226,213,.06);
   }
@@ -346,6 +354,7 @@
   .pf-nav-item:nth-child(2){ animation-delay:.66s; }
   .pf-nav-item:nth-child(3){ animation-delay:.72s; }
   .pf-nav-item:nth-child(4){ animation-delay:.78s; }
+  .pf-nav-item:nth-child(5){ animation-delay:.84s; }
   .pf-nav-item.active{ color:var(--ink); }
   /* 导航栏下的小横线（选中项） */
   .pf-nav-item.active::after{
@@ -382,7 +391,8 @@
   .ask-text{
     position:relative;
     font-family:"Noto Serif SC","Songti SC",serif;
-    font-size:clamp(20px,5.5vw,28px); letter-spacing:.2em; text-indent:.2em;
+    font-size:clamp(24px,7vw,35px); letter-spacing:.2em; margin-right:-.2em;
+    font-weight:600;
     color:var(--ink); text-shadow:0 2px 16px rgba(0,0,0,.95);
   }
   .ask-char{
@@ -391,9 +401,9 @@
   .ask-char.vanish{ animation:askVanish 1.9s cubic-bezier(.45,.05,.55,.95) both; }
   @keyframes askVanish{
     0%   { opacity:1; color:var(--ink); filter:blur(0);   transform:translateY(0)  scaleY(1);    text-shadow:0 2px 16px rgba(0,0,0,.95); }
-    30%  { opacity:1; color:#9e1414; filter:blur(0);   transform:translateY(0)  scaleY(1);    text-shadow:0 0 20px rgba(158,20,20,.75); }
-    55%  { opacity:1; color:#6b0a0a; filter:blur(1.2px);transform:translateY(3px) scaleY(1.04); text-shadow:0 0 22px rgba(107,10,10,.6); }
-    100% { opacity:0; color:#3d0505; filter:blur(6px); transform:translateY(22px) scaleY(.7);   text-shadow:0 0 26px rgba(61,5,5,0); }
+    30%  { opacity:1; color:#2a2a2a; filter:blur(0);   transform:translateY(0)  scaleY(1);    text-shadow:0 0 18px rgba(0,0,0,.75); }
+    55%  { opacity:1; color:#0d0d0d; filter:blur(1.2px);transform:translateY(3px) scaleY(1.04); text-shadow:0 0 20px rgba(0,0,0,.6); }
+    100% { opacity:0; color:#000;    filter:blur(6px); transform:translateY(22px) scaleY(.7);   text-shadow:0 0 24px rgba(0,0,0,0); }
   }
 
   /* ===== 资料卡下部：左下角图片 + 擅长风格（模仿参考图一） ===== */
@@ -462,7 +472,7 @@
   }
   .pf-rules-banner{
     height:74px; width:100%;
-    background:url('rules.jpg') center center / cover no-repeat;
+    background:url('rules.jpg') center center / 100% 100% no-repeat;
     border:1px solid rgba(232,226,213,.16);
     border-radius:14px;
     box-shadow:0 6px 24px rgba(0,0,0,.55);
@@ -699,6 +709,7 @@
           <span class="pf-nav-item" data-nav="rebirth">Rebirth</span>
           <span class="pf-nav-item" data-nav="addiction">Addiction</span>
           <span class="pf-nav-item" data-nav="delusion">Delusion</span>
+          <span class="pf-nav-item" data-nav="degenerate">Degenerate</span>
         </div>
         <!-- 导航栏以下：滑动区 -->
         <div class="pf-scroll">
@@ -987,7 +998,7 @@
   var askText = document.getElementById('askText');
   var fadeDone = false;
 
-  // 消散：文字逐字渐变为暗红，再缓缓融化下坠消失
+  // 消散：全体字同步渐变为暗红，再一起融化下坠消失
   function dissolveAsk(){
     var text = askText.textContent;
     var frag = document.createDocumentFragment();
@@ -996,7 +1007,6 @@
       var s = document.createElement('span');
       s.className = 'ask-char';
       s.textContent = text[i];
-      s.style.animationDelay = (i * .14) + 's';
       frag.appendChild(s);
       chars.push(s);
     }
@@ -1062,29 +1072,47 @@
     });
   });
 
-  // 音乐：第一首贯穿前两页；打开第三页时停第一首、切到第二首自动播放。开关始终控制当前音乐。
+  // 音乐：首页即自动播放；第三页切到第二首。开关控制当前音乐，自动播放被拦截时首次交互恢复有声。
   var audio = document.getElementById('bgm');
   var audio2 = document.getElementById('bgm2');
   var musicToggle = document.getElementById('musicToggle');
   var mlabel = musicToggle.querySelector('.mlabel');
   var currentAudio = audio;
+  var userMuted = false; // 用户是否主动关闭
 
   function syncMusicUI(){
-    if (!currentAudio.paused) {
-      musicToggle.classList.add('playing');
-      mlabel.textContent = '播放中';
-    } else {
+    if (userMuted || currentAudio.paused) {
       musicToggle.classList.remove('playing');
       mlabel.textContent = '音乐';
+    } else {
+      musicToggle.classList.add('playing');
+      mlabel.textContent = '播放中';
     }
   }
   function startAudio(el){
-    el.muted = false;
-    el.play().then(syncMusicUI).catch(function(){
-      el.muted = true;
-      el.play().then(syncMusicUI).catch(function(){});
-    });
+    if (userMuted) { syncMusicUI(); return; }
+    var p = el.play();
+    if (p && p.catch){
+      p.then(syncMusicUI).catch(function(){
+        // 浏览器拦截有声自动播放：先静音播放，保证进度稳定，待首次交互恢复有声
+        el.muted = true;
+        var p2 = el.play();
+        if (p2 && p2.catch) p2.then(syncMusicUI).catch(function(){});
+      });
+    }
   }
+  // 首次交互时解除静音、恢复播放（浏览器允许的时机），幂等可多次触发
+  function unlockSound(){
+    if (userMuted) return;
+    if (currentAudio.muted) currentAudio.muted = false;
+    if (currentAudio.paused) startAudio(currentAudio);
+  }
+  ['touchend','click','keydown'].forEach(function(ev){
+    document.addEventListener(ev, unlockSound, {passive:true});
+  });
+
+  // 页面一加载就自动播放第一首
+  audio.muted = false;
   startAudio(audio);
   audio.addEventListener('play', syncMusicUI);
   audio.addEventListener('pause', syncMusicUI);
@@ -1092,9 +1120,12 @@
   audio2.addEventListener('pause', syncMusicUI);
 
   function toggleMusic(){
-    if (!currentAudio.paused) {
+    if (!userMuted && !currentAudio.paused) {
       currentAudio.pause();
+      userMuted = true;
     } else {
+      userMuted = false;
+      currentAudio.muted = false;
       startAudio(currentAudio);
     }
     syncMusicUI();
