@@ -409,7 +409,10 @@
     border-radius:14px;
     box-shadow:0 6px 24px rgba(0,0,0,.55);
   }
-  .pf-style-info{ flex:1; min-width:0; padding-top:2px; }
+  .pf-style-info{
+    flex:1; min-width:0; padding-top:2px;
+    align-self:stretch; display:flex; flex-direction:column;
+  }
   .pf-style-title{
     position:relative; padding-left:9px; margin-bottom:9px;
     font-family:"Noto Serif SC","Songti SC",serif;
@@ -422,7 +425,7 @@
   }
   .pf-style-row{
     font-family:"Noto Serif SC","Songti SC",serif;
-    font-size:clamp(10px,2.6vw,12px); letter-spacing:.04em;
+    font-size:clamp(11px,2.9vw,14px); letter-spacing:.04em;
     color:rgba(232,226,213,.8); line-height:1.9;
   }
   .pf-style-row .dot{
@@ -444,9 +447,9 @@
   .home-panel.hidden{ opacity:0; pointer-events:none; }
   .other-panel{ display:none; }
   .other-panel.show{ display:block; }
-  /* 三行文字下的哥特文案 */
+  /* 三行文字下的哥特文案：贴着文字块底部，与左侧图片底边平齐 */
   .pf-taboo{
-    margin-top:10px;
+    margin-top:auto; padding-top:10px;
     font-family:"UnifrakturCook","Old English Text MT","Noto Serif SC",serif;
     font-size:clamp(8px,2vw,10px); letter-spacing:.02em; line-height:1.5;
     color:rgba(232,226,213,.9); text-shadow:0 2px 8px rgba(0,0,0,.9);
@@ -465,10 +468,14 @@
     box-shadow:0 6px 24px rgba(0,0,0,.55);
   }
   .pf-rules-title{
-    margin-top:12px; white-space:nowrap;
+    position:relative; padding-left:9px; margin-top:12px; white-space:nowrap;
     font-family:"Noto Serif SC","Songti SC",serif;
     font-size:clamp(14px,3.6vw,17px); letter-spacing:.14em;
     color:var(--ink); text-shadow:0 2px 8px rgba(0,0,0,.95);
+  }
+  .pf-rules-title::before{
+    content:''; position:absolute; left:0; top:2px; bottom:2px; width:2px;
+    background:var(--ink); box-shadow:0 0 6px rgba(232,226,213,.5);
   }
   /* 游戏规则正文：靠左、分行、红色十字架 */
   .pf-rules-list{
@@ -705,6 +712,7 @@
               <div class="pf-style-row"><span class="dot"></span>温病 高恋 低无</div>
               <div class="pf-style-row"><span class="dot"></span>诡辩 单口 动描 微文艺</div>
               <div class="pf-style-row"><span class="dot"></span>微擦 小狗文学 dom病</div>
+              <div class="pf-style-row"><span class="dot"></span>一切以你为主</div>
               <div class="pf-taboo">†₊⁺ ♱ 𝔗𝔞𝔟𝔬𝔬 𝔄𝔢𝔰𝔱𝔥𝔢𝔱𝔦𝔠𝔰 ♱ ⁺₊†</div>
             </div>
           </div>
