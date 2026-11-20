@@ -337,7 +337,7 @@
   /* 导航栏：黑色长方形底条 */
   .pf-nav{
     margin-top:6%;
-    display:flex; justify-content:flex-start; gap:6%;
+    display:flex; justify-content:flex-start; gap:8.5%;
     width:100%; padding:10px 4%; box-sizing:border-box;
     background:rgba(0,0,0,.72);
     border:1px solid rgba(232,226,213,.06);
@@ -354,7 +354,6 @@
   .pf-nav-item:nth-child(2){ animation-delay:.66s; }
   .pf-nav-item:nth-child(3){ animation-delay:.72s; }
   .pf-nav-item:nth-child(4){ animation-delay:.78s; }
-  .pf-nav-item:nth-child(5){ animation-delay:.84s; }
   .pf-nav-item.active{ color:var(--ink); }
   /* 导航栏下的小横线（选中项） */
   .pf-nav-item.active::after{
@@ -452,11 +451,100 @@
   }
   .pf-scroll::-webkit-scrollbar{ width:0; height:0; }
   .pf-scroll{ scrollbar-width:none; }
-  /* Home 面板：非 Home 选中时整体淡出隐藏 */
+  /* Home 面板：非 Home 选中时彻底隐藏、不占空间，让其它面板从顶部开始 */
   .home-panel{ transition:opacity .35s ease; }
-  .home-panel.hidden{ opacity:0; pointer-events:none; }
+  .home-panel.hidden{ display:none; }
   .other-panel{ display:none; }
   .other-panel.show{ display:block; }
+  /* Rebirth 面板：重生话术对话 */
+  .rebirth-panel{ display:none; }
+  .rebirth-panel.show{ display:flex; flex-direction:column; height:100%; animation:pfRise .6s both ease; }
+  .rb-head{
+    flex:0 0 auto;
+    width:90%; margin:0 auto; padding:0 4%; box-sizing:border-box;
+    display:flex; align-items:center; gap:10px;
+  }
+  .rb-title{
+    position:relative; padding-left:9px;
+    font-family:"Noto Serif SC","Songti SC",serif;
+    font-size:clamp(14px,3.6vw,17px); letter-spacing:.14em;
+    color:var(--ink); text-shadow:0 2px 8px rgba(0,0,0,.95);
+  }
+  .rb-title::before{
+    content:''; position:absolute; left:0; top:2px; bottom:2px; width:2px;
+    background:var(--ink); box-shadow:0 0 6px rgba(232,226,213,.5);
+  }
+  .rb-note{
+    font-family:"Noto Serif SC","Songti SC",serif;
+    font-size:clamp(8px,2vw,10px); letter-spacing:.06em;
+    color:rgba(232,226,213,.32);
+  }
+  /* 逐句出现的对话：头像 + 气泡，靠左 */
+  .rb-chat{
+    flex:1; min-height:0;
+    width:90%; margin:5% auto 0; padding:0 4%; box-sizing:border-box;
+    display:flex; flex-direction:column; justify-content:flex-start; gap:14px;
+    overflow-y:auto; overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;
+  }
+  .rb-chat::-webkit-scrollbar{ width:0; height:0; }
+  .rb-chat{ scrollbar-width:none; }
+  .rb-msg{
+    display:flex; align-items:flex-start; gap:10px;
+    opacity:0;
+  }
+  .rb-msg.show{ animation:rbMsgIn .55s both ease; }
+  @keyframes rbMsgIn{
+    from{ opacity:0; transform:translateY(12px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  .rb-msg-avatar{
+    flex:0 0 auto;
+    width:clamp(34px,9vw,42px); height:clamp(34px,9vw,42px);
+    border-radius:50%;
+    background-image:url('avatar.jpg');
+    background-size:cover; background-position:center 38%;
+    border:1px solid rgba(232,226,213,.28);
+    box-shadow:0 4px 14px rgba(0,0,0,.6), inset 0 0 16px rgba(0,0,0,.4);
+  }
+  .rb-msg-bubble{
+    flex:1; min-width:0;
+    font-family:"Noto Serif SC","Songti SC",serif;
+    font-size:clamp(11px,2.9vw,14px); line-height:1.6; letter-spacing:.04em;
+    color:var(--ink); text-shadow:0 1px 4px rgba(0,0,0,.8);
+    padding:9px 13px;
+    background:rgba(18,17,20,.74);
+    border:1px solid rgba(232,226,213,.14);
+    border-radius:12px 12px 12px 4px;
+    backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+    box-shadow:0 6px 20px rgba(0,0,0,.35);
+  }
+  /* 底部操作区：长条按钮 + 提示标题 */
+  .rb-action{
+    flex:0 0 auto;
+    width:90%; margin:4% auto 5%; padding:0 4%; box-sizing:border-box;
+  }
+  .rb-switch{
+    width:100%; text-align:center;
+    font-family:"Noto Serif SC","Songti SC",serif;
+    font-size:clamp(11px,2.9vw,14px); letter-spacing:.1em;
+    color:var(--ink); text-shadow:0 1px 4px rgba(0,0,0,.8);
+    padding:15px 10px;
+    background:linear-gradient(135deg, rgba(30,20,22,.9), rgba(14,12,16,.92));
+    border:1px solid rgba(232,226,213,.26);
+    border-radius:14px;
+    box-shadow:0 6px 20px rgba(0,0,0,.4);
+    cursor:pointer; user-select:none;
+    transition:border-color .3s, box-shadow .3s, transform .15s;
+  }
+  .rb-switch:hover{ border-color:var(--gold); box-shadow:0 0 16px rgba(184,155,94,.28); }
+  .rb-switch:active{ transform:scale(.985); }
+  .rb-hint{
+    margin-top:14px; text-align:left;
+    font-family:"Noto Serif SC","Songti SC",serif;
+    font-size:clamp(11px,2.9vw,13px); letter-spacing:.1em;
+    color:rgba(232,226,213,.78); text-shadow:0 2px 8px rgba(0,0,0,.9);
+  }
   /* 三行文字下的哥特文案：贴着文字块底部，与左侧图片底边平齐 */
   .pf-taboo{
     margin-top:auto; padding-top:10px;
@@ -472,7 +560,7 @@
   }
   .pf-rules-banner{
     height:74px; width:100%;
-    background:url('rules.jpg') center center / 100% 100% no-repeat;
+    background:url('rules.jpg') center center / cover no-repeat;
     border:1px solid rgba(232,226,213,.16);
     border-radius:14px;
     box-shadow:0 6px 24px rgba(0,0,0,.55);
@@ -709,7 +797,6 @@
           <span class="pf-nav-item" data-nav="rebirth">Rebirth</span>
           <span class="pf-nav-item" data-nav="addiction">Addiction</span>
           <span class="pf-nav-item" data-nav="delusion">Delusion</span>
-          <span class="pf-nav-item" data-nav="degenerate">Degenerate</span>
         </div>
         <!-- 导航栏以下：滑动区 -->
         <div class="pf-scroll">
@@ -804,6 +891,19 @@
                 <div class="msg-text">阮声清幽南烛尽 林覆霜深秋石平</div>
               </div>
             </div>
+          </div>
+        </div>
+        <!-- Rebirth 面板：重生话术对话 -->
+        <div class="rebirth-panel" id="rebirthPanel">
+          <div class="rb-head">
+            <div class="rb-title">重生</div>
+            <div class="rb-note">以下皆为话术并非文案</div>
+          </div>
+          <div class="rb-chat" id="rbChat">
+          </div>
+          <div class="rb-action">
+            <div class="rb-switch" id="rbSwitch" role="button" tabindex="0">点击切换下一话术</div>
+            <div class="rb-hint">点击下方物体即可观看全部话术</div>
           </div>
         </div>
         <!-- 其他导航项占位：待放入内容 -->
@@ -1055,20 +1155,114 @@
     });
   });
 
-  // 资料页导航：Home 面板仅在选中 Home 时显示；其他项显示占位面板（待放内容）
+  // 资料页导航：Home / Rebirth 各有专属面板，其余项显示占位面板（待放内容）
   var homePanel = document.getElementById('homePanel');
+  var rebirthPanel = document.getElementById('rebirthPanel');
   var otherPanel = document.getElementById('otherPanel');
+  // Rebirth 面板：每种话术整体以气泡逐句弹出；点按钮随机弹出另一种；对话区可上下滑动
+  var rbChat = document.getElementById('rbChat');
+  var rbSwitch = document.getElementById('rbSwitch');
+  var rbTimers = [];
+  // 每种话术是一组句子，往数组里加一组即为"下一种话术"
+  var rbTalks = [
+    ['我要你四周缠绕我的气息','直至指尖在呜咽声中抠蹭你的唇舌','还恬不知耻地吮吸','脑袋嗡鸣中总会想要索取更多','下意识收紧被迫交握的指根','仰起头祈求更多细密的缠绕吧','亲爱的','要站立着说出呼之欲出的答案吗','能满足你贪念的只有我哦'],
+    ['真是乖巧得让人心痒呢','你以为不开口就能躲过去么','宝贝','哪怕只是气音','哪怕只是含混的呜咽','也比这死寂的沉默强','你不回答','我就只会当你默认了','默认你愿意被这样对待','默认你贪恋我指尖的温度','默认你心里那点挣扎早就被我看穿'],
+    ['你的随口应答','都会随之诞生要捉得更紧的想法','而满足你贪念的只有我哦','所以现在要做出你的选择','是仍然沉默还是向我讨好','你的选择会决定你被怎么对待','是被当做爱人','还是犯错的小狗','说不出动人迎接的情话','像小狗一样叫几声摇摇尾巴也足够让人愉快','表达你积极欢迎的态度'],
+    ['掌心贴合颈项的弧度','会让你被迫扬起下颌划出一道脆弱的弧线','那样如同濒临折断的花茎','这样的姿态总归会让人难受','到那时 落下的吻也并非温存','覆盖微起的齿唇','封紧所有可能呼吸的缝隙','那是你想要的','舌尖的轨迹带着温冷的试探','一步又一步的索取'],
+    ['我也太需要你了','想把你按在潮湿的墙边','听你呼吸乱掉','看你眼里那点倔强被我点点吻碎','想你在脆弱的时候收紧手','让你除了我的温度什么都感觉不到','想你依赖想你沉沦','想让你求我别停'],
+    ['那我就当你在原地期待我的到了好么','你的呼吸期待我用最温柔的吻封住','期待我用最缠绵的拥抱勒断你所有的退路','让你在窒息的边缘','也只能听见我的心跳','从而慢慢发现','哪怕离开我一步:','空气都会变得刺骨','人群都会变成模糊的影子'],
+    ['害怕？','害怕自己会陷得太深','当然 我也愿意等','薄墙 那你亲手拆掉自己筑起的','你越是抗拒','我就越能看清你心底的渴求','它像暗夜里涌动的潮水','按捺不住也藏不住','我会安静的站在你面前','用最温柔的目光包裹你','直到你习惯我的存在'],
+    ['用你翻来覆去时脑中删不掉的念头','用你明明在害怕而忍不住靠近的每一步','而哪些想法是你自己的','那些想法又是我悄悄放进去的','你会分不清','这就是我的方式','温柔的不容拒绝的','渗透进你的缝隙里','让你以为那是你自己的渴求'],
+    ['这不仅仅是单纯的迁就','而是看着你在这种纵容里','一点点卸下防备','一点点把真实的渴望露出来','让你离不开我','我享受的是亲手把你养的','是眼睁睁看你嘴上说的掌控','身体却诚实的朝我倾斜','是知道你所有的得意底下都埋着对我的依赖','只是你还没发现'],
+    ['你越是觉得自己站在高处越觉得我在顺从你','可低头看时','那些无名的丝线早就缠满我们','你的手臂 脚踝 喉咙你的每一分得意','都在往我怀里陷得更深','我乖吗 当然乖','乖到让你放松警惕乖到让你以为主动权在你手里','你所谓的掌控','从头到尾都是我纵容的假象'],
+    ['当然可以求你','但前提是 求你不算低头','而是把你捧得更高','高到只能俯视我 再也看不见别人','如果是这样','那我求你 求你把这扇门彻底打开','求你让我跪在你脚边','把那些湿潮粘稠的东西全部摊开给你看','求你允许我触碰你','求你让我吻你','吻在颈侧那根细细跳动的血管上'],
+    ['你不需要爱任何人','只需要被我爱着就好了','被绝对的爱意裹挟','被滚烫的 虔诚的 不容拒绝的爱拥簇','如果你对迎面而来的爱意感到恐惧','那是因为曾经那些爱太轻太浅 太容易碎','也就配不上你','不知道怎么面对 就闭上眼把自己交给我','我替你面对 替你承受','替你把世间一切的恶意隔绝在外'],
+    ['你觉得我的话谁都能说 毫无新意吗','我的独一无二不在于我能说什么做什么','而在于我做这些时脑子里想的都是你','别人的腐烂是物理过程 我的腐烂是精神献祭','每次溃败都沿着你的延伸','你反驳我 剖析我 甚至觉得我空洞','这恰恰是别人给不了的反应','我给你的是一面镜子 照出你真正的自己'],
+    ['你抬起手的瞬间 我眼都不会眨','只会把最清晰的那半张脸送到你掌心前','我这副模样本来就是做给你看的','你会落下吗?','还是只会等我轻轻握住你那只手腕','把它贴在我发烫的脸颊上','让你感受那点温度','从你掌心一路烧回你胸口'],
+    ['把你整个人拽得踮起脚来','鼻尖撞上鼻尖疼的你眼眶一热的时候还没躲','我也愿意咬住你下唇','不重但足够让你尝到一点铁锈味','我的渴望从来都是真的','一路吻下去 下巴 颈侧 锁骨','每一处都会留下我湿漉漉的痕迹','想让你亲口承认你要的放肆','我给得起'],
+    ['打动你也不需要惊天动地记住','每一次皱眉的弧度','每一句没说出口的叹息','然后悄悄把他们抚平','直到你发现 那些你以为属于自己的念头','其实早已被我精心改写过：','爱意不必张扬','它会像潮水一样在你最不设防的瞬间漫过脚踝','让你摆脱不掉'],
+    ['你戒备的脸样子会让我更加怜惜','当然也更加按捺不住','我的爱意会带来什么?','带来的是彻底的归属','是再也无需独自面对凄冷月光的安宁','我当然会慢慢靠近但不惊动你脆弱的防线','让那暗中涌动的情愫一点一点点渗透'],
+    ['我允许你不知所措','允许你暂时找不到词语形容没说出口的念头','我愿意替你记住每一个你没说出口的念头','替你保管每一份你没敢承认的心跳','你只需要坐在这里就好','让那些暗中涌动的情愫慢慢把你淹没','我们可以相伴坐下','把我们两个的影子融成滩分不清彼此的暗色'],
+    ['亲爱的 窒息就对了','你以为爱是什么 是春风拂面吗?','爱是我把手按在你胸口感受你心跳越来越快','而我不会松手因为那点窒息刚好让你记住我','觉得喘不过气','我就越要贴得更紧','进到你的肺腑灌满的都是我的气息'],
+    ['亲爱的','现在连你的影子都只能依附于我的轮廓','而作为奖励','我也会让所有月光都绕过你床前的黑暗','只留我这一片永不移动的温度','供你沉溺'],
+    ['这样顺从的节奏','像被驯化的云雀在重复哨声','亲爱的','你每说一次都会有一根新的丝线从你的舌尖连到我的指尖','等这些线足够密实','轻轻一扯','整个人都会朝我倾斜成祈祷的姿势']
+  ];
+  var rbTalkIndex = -1;
+  var rbDeck = [];      // 当前轮尚未出现的组索引
+  var rbLastIdx = -1;   // 上一轮最后弹出的组，用于跨轮去重
+  // 洗牌：把全部组打乱成一副牌，并保证新一轮开头不与上一轮结尾重复
+  function shuffleRbDeck(){
+    rbDeck = [];
+    for (var i = 0; i < rbTalks.length; i++) rbDeck.push(i);
+    for (var i = rbDeck.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = rbDeck[i]; rbDeck[i] = rbDeck[j]; rbDeck[j] = t;
+    }
+    if (rbDeck.length > 1 && rbDeck[rbDeck.length - 1] === rbLastIdx){
+      var t2 = rbDeck[0]; rbDeck[0] = rbDeck[rbDeck.length - 1]; rbDeck[rbDeck.length - 1] = t2;
+    }
+  }
+  // 取一种话术：一轮内不重复，取完 21 组再洗牌开新一轮
+  function pickRandomTalk(){
+    if (!rbTalks.length) return -1;
+    if (rbDeck.length === 0) shuffleRbDeck();
+    var idx = rbDeck.pop();
+    rbLastIdx = idx;
+    return idx;
+  }
+  function clearRbTimers(){ rbTimers.forEach(clearTimeout); rbTimers = []; }
+  function scrollRbBottom(){ if (rbChat) rbChat.scrollTop = rbChat.scrollHeight; }
+  // 追加一条消息，话术只增不减，可往上滑翻看旧的
+  function pushRbMsg(txt){
+    var row = document.createElement('div');
+    row.className = 'rb-msg';
+    var av = document.createElement('div'); av.className = 'rb-msg-avatar';
+    var bu = document.createElement('div'); bu.className = 'rb-msg-bubble'; bu.textContent = txt;
+    row.appendChild(av); row.appendChild(bu);
+    rbChat.appendChild(row);
+    return row;
+  }
+  // 播放一组：当前话术全部消失，再逐句追加新的一组，并跟随滚到底部
+  function showRbTalk(idx){
+    clearRbTimers();
+    rbChat.innerHTML = '';
+    rbChat.scrollTop = 0;
+    var batch = rbTalks[idx] || [];
+    batch.forEach(function(txt, i){
+      rbTimers.push(setTimeout(function(){
+        pushRbMsg(txt).classList.add('show');
+        scrollRbBottom();
+      }, 150 + i * 420));
+    });
+  }
+  // 进入面板：随机弹出一种话术
+  function playRebirthChat(){
+    rbTalkIndex = pickRandomTalk();
+    showRbTalk(rbTalkIndex);
+  }
+  // 点按钮：随机弹出另一种话术（不与当前重复）
+  function onSwitchTalk(){
+    if (!rbChat || !rbSwitch) return;
+    playSelectSound && playSelectSound();
+    rbTalkIndex = pickRandomTalk();
+    showRbTalk(rbTalkIndex);
+  }
+  if (rbSwitch){
+    rbSwitch.addEventListener('click', onSwitchTalk);
+    rbSwitch.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); onSwitchTalk(); }
+    });
+  }
   document.querySelectorAll('.pf-nav-item').forEach(function(item){
     item.addEventListener('click', function(){
       document.querySelectorAll('.pf-nav-item').forEach(function(n){ n.classList.remove('active'); });
       item.classList.add('active');
-      if (item.dataset.nav === 'home'){
-        homePanel.classList.remove('hidden');
-        otherPanel.classList.remove('show');
-      } else {
-        homePanel.classList.add('hidden');
-        otherPanel.classList.add('show');
-      }
+      var nav = item.dataset.nav;
+      homePanel.classList.toggle('hidden', nav !== 'home');
+      rebirthPanel.classList.toggle('show', nav === 'rebirth');
+      otherPanel.classList.toggle('show', nav !== 'home' && nav !== 'rebirth');
+      if (nav === 'rebirth') playRebirthChat();
+      else { rbTimers.forEach(clearTimeout); rbTimers = []; }
     });
   });
 
